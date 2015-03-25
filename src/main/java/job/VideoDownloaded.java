@@ -49,7 +49,7 @@ public class VideoDownloaded extends Configured implements Tool {
         JobConf job = new JobConf(conf, VideoDownloaded.class);
         job.setJarByClass(getClass());
         Path in = new Path(args[0]);
-        Path out = new Path("Out-VideoDownloaded");
+        Path out = new Path(args[1]+"/Out-VideoDownloaded");
 
         FileInputFormat.setInputPaths(job, in);
         FileOutputFormat.setOutputPath(job, out);

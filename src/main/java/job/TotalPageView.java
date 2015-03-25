@@ -49,7 +49,7 @@ public class TotalPageView extends Configured implements Tool {
         JobConf job = new JobConf(conf, TotalPageView.class);
         job.setJarByClass(getClass());
         Path in = new Path(args[0]);
-        Path out = new Path("Out-TotalPageView");
+        Path out = new Path(args[1]+"/Out-TotalPageView");
 
         FileInputFormat.setInputPaths(job, in);
         FileOutputFormat.setOutputPath(job, out);

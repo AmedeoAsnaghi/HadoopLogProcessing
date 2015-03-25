@@ -30,11 +30,9 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.FileOutputFormat;
-import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.jobcontrol.Job;
 import org.apache.hadoop.mapred.jobcontrol.JobControl;
-import org.apache.hadoop.mapred.lib.IdentityMapper;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import reduce.ReferringCountReduce;
@@ -57,7 +55,7 @@ public class ReferringCount extends Configured implements Tool {
         //First job
         jobConf1.setJarByClass(getClass());
         Path in = new Path(args[0]);
-        Path out = new Path("temp");
+        Path out = new Path(args[1]+"/temp");
 
         FileInputFormat.setInputPaths(jobConf1, in);
         FileOutputFormat.setOutputPath(jobConf1, out);
@@ -78,8 +76,8 @@ public class ReferringCount extends Configured implements Tool {
         //Second job
         jobConf2.setJarByClass(getClass());
 
-        FileInputFormat.setInputPaths(jobConf2, new Path("temp/part-00000"));
-        FileOutputFormat.setOutputPath(jobConf2, new Path("Out-ReferringCount"));
+        FileInputFormat.setInputPaths(jobConf2, new Path(args[1]+"/temp/part-00000"));
+        FileOutputFormat.setOutputPath(jobConf2, new Path(args[1]+"/Out-ReferringCount"));
         jobConf2.setJobName("ReferringCount - part 2");
 
         jobConf2.setMapperClass(DateDomainToDateMap.class);
@@ -96,6 +94,8 @@ public class ReferringCount extends Configured implements Tool {
         job2.addDependingJob(job1);
 
         jobControl.run();
+        while(!jobControl.allFinished()){}
+        System.exit(0);
         return 0;
     }
 }

@@ -49,7 +49,7 @@ public class ReferralsPerDomain extends Configured implements Tool {
         JobConf job = new JobConf(conf, ReferralsPerDomain.class);
         job.setJarByClass(getClass());
         Path in = new Path(args[0]);
-        Path out = new Path("Out-ReferralsPerDomain");
+        Path out = new Path(args[1]+"/Out-ReferralsPerDomain");
 
         FileInputFormat.setInputPaths(job, in);
         FileOutputFormat.setOutputPath(job, out);
